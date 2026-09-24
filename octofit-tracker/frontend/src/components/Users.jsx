@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react'
-import { fetchCollection, formatDate } from '../api.js'
+import { API_BASE_URL, fetchCollection, formatDate } from '../api.js'
+
+const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim()
+const usersEndpoint = codespaceName
+  ? `https://${codespaceName}-8000.app.github.dev/api/users/`
+  : `${API_BASE_URL}/api/users/`
 
 function Users() {
   const [users, setUsers] = useState([])
@@ -7,7 +12,7 @@ function Users() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    fetchCollection('users')
+    fetchCollection(usersEndpoint)
       .then(setUsers)
       .then(() => setStatus('ready'))
       .catch((requestError) => {

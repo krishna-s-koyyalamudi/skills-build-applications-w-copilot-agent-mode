@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react'
-import { fetchCollection, formatDate } from '../api.js'
+import { API_BASE_URL, fetchCollection, formatDate } from '../api.js'
+
+const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim()
+const activitiesEndpoint = codespaceName
+  ? `https://${codespaceName}-8000.app.github.dev/api/activities/`
+  : `${API_BASE_URL}/api/activities/`
 
 function Activities() {
   const [activities, setActivities] = useState([])
@@ -7,7 +12,7 @@ function Activities() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    fetchCollection('activities')
+    fetchCollection(activitiesEndpoint)
       .then(setActivities)
       .then(() => setStatus('ready'))
       .catch((requestError) => {
